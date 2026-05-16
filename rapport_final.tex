@@ -1,0 +1,582 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{amssymb}
+
+\geometry{margin=2.5cm}
+
+% Définition des couleurs (thème bleu clair)
+\definecolor{primaryblue}{RGB}{41, 128, 185}
+\definecolor{lightblue}{RGB}{174, 214, 241}
+\definecolor{darkblue}{RGB}{21, 67, 96}
+\definecolor{codebackground}{RGB}{236, 240, 241}
+\definecolor{codeborder}{RGB}{149, 165, 166}
+
+% Configuration des hyperliens
+\hypersetup{
+    colorlinks=true,
+    linkcolor=darkblue,
+    filecolor=primaryblue,
+    urlcolor=primaryblue,
+    citecolor=darkblue
+}
+
+% Configuration des listings pour Java
+\lstset{
+    language=Java,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{primaryblue}\bfseries,
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{darkblue},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    backgroundcolor=\color{codebackground},
+    frame=leftline,
+    framerule=3pt,
+    rulecolor=\color{primaryblue},
+    breaklines=true,
+    breakatwhitespace=false,
+    tabsize=4,
+    showstringspaces=false,
+    captionpos=b,
+    xleftmargin=15pt
+}
+
+% Style des titres de sections
+\titleformat{\section}
+{\color{primaryblue}\normalfont\LARGE\bfseries}
+{\thesection}{1em}{}
+[\titlerule]
+
+\titleformat{\subsection}
+{\color{darkblue}\normalfont\Large\bfseries}
+{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+{\color{primaryblue}\normalfont\large\bfseries}
+{\thesubsubsection}{1em}{}
+
+% En-tête et pied de page
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\color{darkblue}\small Master Sécurité IT \& Big Data}
+\fancyhead[R]{\color{darkblue}\small Projet SMA}
+\fancyfoot[C]{\color{darkblue}\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{primaryblue}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{primaryblue}\leaders\hrule height \footrulewidth\hfill}}
+
+% Boîtes colorées pour les informations importantes
+\tcbuselibrary{skins}
+\newtcolorbox{infobox}[1]{
+    colback=lightblue!20,
+    colframe=primaryblue,
+    fonttitle=\bfseries,
+    title=#1,
+    arc=3mm
+}
+
+\begin{document}
+
+% Page de garde
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture,overlay]
+        \fill[primaryblue] (current page.north west) rectangle ([yshift=-8cm]current page.north east);
+    \end{tikzpicture}
+
+    \centering
+    \vspace*{1.5cm}
+
+    {\color{white}\LARGE\bfseries Université Mohammed V de Rabat\par}
+    \vspace{0.3cm}
+    {\color{white}\Large Faculté des Sciences\par}
+    \vspace{0.5cm}
+    {\color{white}\large Master Sécurité IT \& Big Data\par}
+
+    \vspace{3cm}
+
+    {\color{primaryblue}\Huge\bfseries Projet 8\par}
+    \vspace{0.8cm}
+    {\color{darkblue}\LARGE\bfseries Application SMA pour le\\Contrôle Aérien\par}
+
+    \vspace{1cm}
+    \begin{tcolorbox}[colback=lightblue!30, colframe=primaryblue, width=0.8\textwidth, arc=5mm, boxrule=1.5pt]
+        \centering
+        \large\textbf{Module :} Systèmes Multi-Agents (SMA)
+    \end{tcolorbox}
+
+    \vspace{2cm}
+
+    \begin{minipage}{0.45\textwidth}
+        \begin{flushleft}
+            {\Large\textbf{\color{primaryblue}Réalisé par :}\par}
+            \vspace{0.5cm}
+            {\large
+                \textbullet~Ait Ezzaouite Mohamed\\[0.3cm]
+                \textbullet~Anas Ahrarche\\[0.3cm]
+                \textbullet~Nadir Mounim\par
+            }
+        \end{flushleft}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}{0.45\textwidth}
+        \begin{flushright}
+            {\Large\textbf{\color{primaryblue}Encadré par :}\par}
+            \vspace{0.5cm}
+            {\large
+                Pr. El Mokhtar EN-NAIMI\par
+            }
+        \end{flushright}
+    \end{minipage}
+
+    \vfill
+
+    {\large\color{darkblue} Année Universitaire 2024-2025\par}
+\end{titlepage}
+
+% Table des matières
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+
+% Introduction
+\section{Introduction}
+
+La congestion du trafic aérien est un problème mondial qui coûte de plus en plus cher. Pour résoudre ce problème, il existe deux méthodes principales : la \textbf{gestion de la demande} et l'\textbf{amélioration de capacité}.
+
+\begin{infobox}{Contexte du Projet}
+Le gestionnaire du trafic aérien modifie la demande en contrôlant les départs, de sorte que la capacité ne dépasse pas un seuil défini. Cette tâche est essentiellement faite par le contrôleur de trafic aérien appelé \textbf{directeur de flux}.
+\end{infobox}
+
+La gestion de la demande comprend l'allocation de créneaux horaires (slots) et la réduction de la surcharge pendant les heures de pointe. L'amélioration de la capacité peut être réalisée avec la construction de nouvelles pistes dans l'aéroport. Le coût élevé de la deuxième solution fait accroître l'intérêt de la méthode de gestion de la demande.
+
+Dans ce rapport, nous présentons notre système multi-agents (SMA) développé avec la plateforme JADE pour gérer efficacement le trafic aérien en allouant des créneaux horaires optimaux.
+
+\section{Problématique}
+
+Le principal défi dans la gestion du trafic aérien est d'optimiser l'utilisation des pistes d'atterrissage et de décollage tout en :
+
+\begin{itemize}[leftmargin=*]
+    \item[\color{primaryblue}$\blacktriangleright$] Respectant les priorités des vols (urgences, carburant faible, vols normaux)
+    \item[\color{primaryblue}$\blacktriangleright$] Minimisant les temps d'attente
+    \item[\color{primaryblue}$\blacktriangleright$] Évitant les conflits de créneaux horaires
+    \item[\color{primaryblue}$\blacktriangleright$] Gérant efficacement la capacité limitée des pistes
+\end{itemize}
+
+\section{Conception du Système Multi-Agents}
+
+\subsection{Méthodologie Utilisée}
+
+Notre conception s'appuie sur les principes des méthodologies \textbf{AUML} (Agent UML) et \textbf{GAIA} pour la modélisation des agents et de leurs interactions. Ces méthodologies nous permettent de structurer le système en définissant clairement les rôles, responsabilités et protocoles de communication.
+
+\subsection{Diagramme de Cas d'Utilisation}
+
+Le diagramme de cas d'utilisation (Figure \ref{fig:usecase}) présente les principales fonctionnalités du système du point de vue des différents agents.
+
+\begin{figure}[h]
+    \centering
+    \fcolorbox{primaryblue}{white}{%
+        \includegraphics[width=0.85\textwidth]{use-case.png}%
+    }
+    \caption{Diagramme de cas d'utilisation du système}
+    \label{fig:usecase}
+\end{figure}
+
+\begin{infobox}{Acteurs Principaux}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{FlightAgent} : Demande un créneau pour atterrir ou décoller
+    \item \textbf{ControllerAgent} : Gère la file d'attente, trie par priorité et attribue les créneaux
+    \item \textbf{RunwayAgent} : Vérifie la disponibilité des créneaux et confirme/rejette les propositions
+\end{itemize}
+\end{infobox}
+
+\subsection{Diagramme de Classes}
+
+Le diagramme de classes (Figure \ref{fig:classdiagram}) montre la structure statique de notre système multi-agents avec les relations entre les différents agents.
+
+\begin{figure}[h]
+    \centering
+    \fcolorbox{primaryblue}{white}{%
+        \includegraphics[width=0.7\textwidth]{class-diagram.png}%
+    }
+    \caption{Diagramme de classes du système}
+    \label{fig:classdiagram}
+\end{figure}
+
+\textbf{Description des classes principales :}
+
+\begin{description}[style=nextline, leftmargin=0pt]
+    \item[\color{primaryblue}FlightAgent] Agent représentant un vol avec ses attributs (identifiant, priorité, heure demandée) et ses méthodes (demanderCreneau, recevoirAttribution)
+
+    \item[\color{primaryblue}ControllerAgent] Agent contrôleur qui maintient une file d'attente de requêtes et implémente les méthodes de tri par priorité, attribution de créneaux et notification des vols
+
+    \item[\color{primaryblue}RunwayAgent] Agent gérant le planning des pistes avec les méthodes de vérification de disponibilité et mise à jour du planning
+\end{description}
+
+\subsection{Diagramme de Séquence}
+
+Le diagramme de séquence (Figure \ref{fig:sequencediagram}) illustre le flux d'interactions entre les agents lors d'une demande de créneau.
+
+\begin{figure}[h]
+    \centering
+    \fcolorbox{primaryblue}{white}{%
+        \includegraphics[width=0.9\textwidth]{sequence-diagramm.png}%
+    }
+    \caption{Diagramme de séquence - Attribution de créneau}
+    \label{fig:sequencediagram}
+\end{figure}
+
+\textbf{Scénario d'attribution de créneau :}
+\begin{enumerate}[leftmargin=*, label=\textcolor{primaryblue}{\textbf{\arabic*.}}]
+    \item Le \texttt{FlightAgent} envoie une demande de créneau au \texttt{ControllerAgent}
+    \item Le \texttt{ControllerAgent} propose un créneau au \texttt{RunwayAgent}
+    \item Le \texttt{RunwayAgent} accepte ou rejette la proposition
+    \item Le \texttt{ControllerAgent} attribue le créneau et notifie le \texttt{FlightAgent}
+    \item Le \texttt{FlightAgent} accuse réception
+\end{enumerate}
+
+\subsection{Diagramme d'Interaction}
+
+Le diagramme d'interaction (Figure \ref{fig:interactiondiagram}) montre les échanges de messages entre les agents selon le protocole FIPA.
+
+\begin{figure}[h]
+    \centering
+    \fcolorbox{primaryblue}{white}{%
+        \includegraphics[width=0.9\textwidth]{interaction-diagramm.png}%
+    }
+    \caption{Diagramme d'interaction entre agents}
+    \label{fig:interactiondiagram}
+\end{figure}
+
+\begin{infobox}{Performatives FIPA Utilisées}
+\begin{itemize}[leftmargin=*]
+    \item \texttt{DEMANDE\_CRENEAU} : Requête initiale du vol
+    \item \texttt{PROPOSER\_CRENEAU} : Proposition du contrôleur vers la piste
+    \item \texttt{ACCEPTER / REJETER} : Réponse de la piste
+    \item \texttt{CRENEAU\_PROPOSE / REFUS} : Notification au vol
+    \item \texttt{ACCUSE\_RECEPTION} : Confirmation finale
+\end{itemize}
+\end{infobox}
+
+\section{Architecture du Système}
+
+\subsection{Rôles des Agents}
+
+\subsubsection{FlightAgent (Agent Vol)}
+
+\begin{tcolorbox}[colback=lightblue!15, colframe=primaryblue, title=\textbf{Rôle}]
+Représente un vol individuel (atterrissage ou décollage)
+\end{tcolorbox}
+
+\textbf{Responsabilités :}
+\begin{itemize}[leftmargin=*]
+    \item Envoyer une demande de créneau avec ses paramètres (ID, opération, heure souhaitée, priorité)
+    \item Recevoir et confirmer l'attribution du créneau
+\end{itemize}
+
+\textbf{Comportements :}
+\begin{itemize}[leftmargin=*]
+    \item \texttt{OneShotBehaviour} : Envoi de la requête initiale
+    \item \texttt{CyclicBehaviour} : Écoute des réponses du contrôleur
+\end{itemize}
+
+\subsubsection{ControllerAgent (Directeur de Flux)}
+
+\begin{tcolorbox}[colback=lightblue!15, colframe=primaryblue, title=\textbf{Rôle}]
+Gestionnaire central du trafic aérien
+\end{tcolorbox}
+
+\textbf{Responsabilités :}
+\begin{itemize}[leftmargin=*]
+    \item Maintenir une file d'attente des demandes de vols
+    \item Trier les demandes par priorité puis par heure demandée
+    \item Proposer des créneaux au RunwayAgent
+    \item Gérer les rejets en reportant les créneaux (+5 minutes)
+    \item Notifier les vols des attributions
+\end{itemize}
+
+\textbf{Algorithme de gestion :}
+\begin{enumerate}[leftmargin=*, label=\textcolor{primaryblue}{\arabic*.}]
+    \item Réception des nouvelles demandes
+    \item Tri de la file : priorité (1 $>$ 2 $>$ 3) puis heure
+    \item Arrondi de l'heure au multiple de 5 supérieur
+    \item Négociation avec RunwayAgent
+    \item Attribution ou report du créneau
+\end{enumerate}
+
+\subsubsection{RunwayAgent (Agent Piste)}
+
+\begin{tcolorbox}[colback=lightblue!15, colframe=primaryblue, title=\textbf{Rôle}]
+Gestionnaire de la capacité de la piste
+\end{tcolorbox}
+
+\textbf{Responsabilités :}
+\begin{itemize}[leftmargin=*]
+    \item Maintenir le planning des créneaux occupés
+    \item Vérifier la disponibilité des créneaux proposés
+    \item Accepter ou rejeter les propositions
+    \item Afficher l'état du planning
+\end{itemize}
+
+\subsection{Protocole de Communication}
+
+Le système utilise le protocole \textbf{FIPA-Request} avec les performatives ACL suivantes :
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor{lightblue!30}
+\textbf{Performative} & \textbf{Description} \\
+\hline
+\texttt{REQUEST} & Demande de créneau (Flight $\rightarrow$ Controller) \\
+\hline
+\texttt{PROPOSE} & Proposition de créneau (Controller $\rightarrow$ Runway) \\
+\hline
+\texttt{ACCEPT\_PROPOSAL} & Créneau disponible (Runway $\rightarrow$ Controller) \\
+\hline
+\texttt{REJECT\_PROPOSAL} & Créneau occupé (Runway $\rightarrow$ Controller) \\
+\hline
+\texttt{INFORM} & Attribution confirmée (Controller $\rightarrow$ Flight) \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Implémentation}
+
+\subsection{Plateforme Utilisée}
+
+Nous avons choisi \textbf{JADE} (Java Agent DEvelopment Framework) comme plateforme de développement.
+
+\begin{infobox}{Avantages de JADE}
+\begin{itemize}[leftmargin=*]
+    \item Conformité aux standards FIPA
+    \item Bibliothèques riches pour la communication inter-agents
+    \item Facilité de déploiement et de débogage
+    \item Large communauté et documentation
+\end{itemize}
+\end{infobox}
+
+\subsection{Code Source Principal}
+
+\subsubsection{Main.java}
+
+Point d'entrée du système qui initialise le conteneur JADE et crée les agents.
+
+\begin{lstlisting}[caption=Main.java - Initialisation du système]
+public class Main {
+    public static void main(String[] args) throws Exception {
+        Runtime rt = Runtime.instance();
+        Profile p = new ProfileImpl();
+        AgentContainer mc = rt.createMainContainer(p);
+
+        // Creation des agents
+        mc.createNewAgent("runway", "RunwayAgent", null).start();
+        mc.createNewAgent("controller", "ControllerAgent", null).start();
+
+        // Vols de test
+        mc.createNewAgent("F1", "FlightAgent",
+            new Object[]{"F1","LAND","10","1"}).start();
+        mc.createNewAgent("F2", "FlightAgent",
+            new Object[]{"F2","TAKEOFF","12","3"}).start();
+        // ...
+    }
+}
+\end{lstlisting}
+
+\subsubsection{ControllerAgent.java - Extraits Clés}
+
+L'algorithme principal du contrôleur :
+
+\begin{lstlisting}[caption=ControllerAgent.java - Tri et attribution]
+// Tri de la file d'attente par priorite puis heure
+queue.sort(Comparator
+    .comparingInt((FlightRequest f) -> f.priority)
+    .thenComparingInt(f -> f.requestedTime));
+
+FlightRequest top = queue.get(0);
+int slotTime = roundUpTo5(top.requestedTime);
+
+// Proposition au RunwayAgent
+ACLMessage propose = new ACLMessage(ACLMessage.PROPOSE);
+propose.addReceiver(runwayAgent);
+propose.setContent(top.flightId + "," + slotTime);
+send(propose);
+
+// Attente de la reponse
+ACLMessage reply = blockingReceive(mt);
+if (reply.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
+    queue.remove(top);
+    // Notification du vol
+} else {
+    top.requestedTime += 5; // Report de 5 minutes
+}
+\end{lstlisting}
+
+\subsubsection{RunwayAgent.java - Extraits Clés}
+
+Gestion du planning de la piste :
+
+\begin{lstlisting}[caption=RunwayAgent.java - Verification de disponibilite]
+String[] parts = msg.getContent().split(",");
+String flightId = parts[0];
+int slotTime = Integer.parseInt(parts[1]);
+
+ACLMessage reply = msg.createReply();
+if (!schedule.containsKey(slotTime)) {
+    schedule.put(slotTime, flightId);
+    reply.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+    System.out.println("Runway schedule: " + schedule);
+} else {
+    reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+}
+send(reply);
+\end{lstlisting}
+
+\section{Fonctionnement du Système}
+
+\subsection{Algorithme de Gestion des Priorités}
+
+Le système utilise un algorithme de tri multi-critères :
+
+\begin{enumerate}[leftmargin=*, label=\textcolor{primaryblue}{\textbf{\arabic*.}}]
+    \item \textbf{Critère principal :} Priorité du vol
+    \begin{itemize}
+        \item Priorité 1 : Urgence (problème technique, urgence médicale)
+        \item Priorité 2 : Carburant faible
+        \item Priorité 3 : Vol normal
+    \end{itemize}
+
+    \item \textbf{Critère secondaire :} Heure de demande (ordre chronologique)
+
+    \item \textbf{Arrondi des créneaux :} Au multiple de 5 minutes supérieur
+\end{enumerate}
+
+\subsection{Gestion des Conflits}
+
+\begin{tcolorbox}[colback=lightblue!15, colframe=primaryblue, title=\textbf{Processus de Résolution}]
+Lorsqu'un créneau proposé est déjà occupé :
+\begin{enumerate}[leftmargin=*]
+    \item Le RunwayAgent rejette la proposition
+    \item Le ControllerAgent reporte la demande de 5 minutes
+    \item Le vol reste dans la file pour une nouvelle tentative
+    \item Le processus se répète jusqu'à trouver un créneau disponible
+\end{enumerate}
+\end{tcolorbox}
+
+\subsection{Exemple d'Exécution}
+
+Pour le scénario défini dans \texttt{Main.java} avec 5 vols :
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\rowcolor{lightblue!30}
+\textbf{Vol} & \textbf{Opération} & \textbf{Heure} & \textbf{Priorité} & \textbf{Créneau Attribué} \\
+\hline
+F1 & LAND & 10 & 1 & 10 \\
+\hline
+F5 & TAKEOFF & 10 & 1 & 15 \\
+\hline
+F3 & LAND & 11 & 2 & 20 \\
+\hline
+F4 & LAND & 10 & 3 & 25 \\
+\hline
+F2 & TAKEOFF & 12 & 3 & 30 \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Tests et Validation}
+
+\subsection{Scénarios de Test}
+
+\begin{enumerate}[leftmargin=*, label=\textcolor{primaryblue}{\textbf{\arabic*.}}]
+    \item \textbf{Test de priorité :} Vérification que les urgences sont traitées en premier
+    \item \textbf{Test de conflit :} Gestion correcte des créneaux déjà occupés
+    \item \textbf{Test de charge :} Comportement avec un grand nombre de vols
+    \item \textbf{Test de communication :} Bon échange de messages FIPA
+\end{enumerate}
+
+\subsection{Résultats}
+
+\begin{tcolorbox}[colback=green!10, colframe=green!60!black, title=\textbf{Validation du Système}]
+Le système fonctionne correctement et respecte les contraintes suivantes :
+\begin{itemize}[leftmargin=*]
+    \item[$\checkmark$] Attribution basée sur les priorités
+    \item[$\checkmark$] Pas de double allocation de créneau
+    \item[$\checkmark$] Gestion automatique des conflits
+    \item[$\checkmark$] Communication asynchrone efficace
+\end{itemize}
+\end{tcolorbox}
+
+\section{Avantages et Limites}
+
+\subsection{Avantages}
+
+\begin{itemize}[leftmargin=*]
+    \item[\color{primaryblue}$\blacksquare$] \textbf{Décentralisation :} Chaque agent gère sa propre logique
+    \item[\color{primaryblue}$\blacksquare$] \textbf{Scalabilité :} Facilement extensible à plusieurs pistes
+    \item[\color{primaryblue}$\blacksquare$] \textbf{Robustesse :} Gestion automatique des conflits
+    \item[\color{primaryblue}$\blacksquare$] \textbf{Standards :} Conformité FIPA et JADE
+\end{itemize}
+
+\subsection{Limites et Améliorations Possibles}
+
+\textbf{Limitations actuelles :}
+\begin{itemize}[leftmargin=*]
+    \item Piste unique (système mono-piste)
+    \item Vols hardcodés dans le code source
+    \item Absence d'interface graphique
+    \item Algorithme d'allocation simple
+\end{itemize}
+
+\textbf{Améliorations futures :}
+\begin{itemize}[leftmargin=*]
+    \item Interface graphique web ou JADE GUI
+    \item Gestion multi-pistes
+    \item Algorithmes d'optimisation avancés
+    \item Statistiques de performance
+    \item Intégration de données météorologiques
+\end{itemize}
+
+\section{Conclusion}
+
+Ce projet nous a permis de développer un système multi-agents fonctionnel pour la gestion du trafic aérien en utilisant la plateforme JADE. Nous avons appliqué les concepts des systèmes multi-agents (autonomie, communication, négociation) pour résoudre un problème complexe de gestion de ressources partagées.
+
+\begin{infobox}{Apports du Projet}
+\begin{itemize}[leftmargin=*]
+    \item Coordination décentralisée entre agents autonomes
+    \item Gestion de priorités multiples
+    \item Résolution de conflits de ressources
+    \item Communication asynchrone via protocoles FIPA
+\end{itemize}
+\end{infobox}
+
+Les méthodologies AUML et GAIA nous ont fourni un cadre structuré pour la conception, tandis que JADE a facilité l'implémentation avec ses bibliothèques conformes aux standards FIPA.
+
+Ce travail constitue une base solide qui pourrait être étendue vers un système de gestion du trafic aérien plus complet et réaliste, avec des fonctionnalités avancées et une interface utilisateur moderne.
+
+\section*{Références}
+
+\begin{enumerate}[leftmargin=*]
+    \item FIPA Agent Communication Language Specifications
+    \item Bellifemine, F., Caire, G., \& Greenwood, D. (2007). \textit{Developing Multi-Agent Systems with JADE}
+    \item Wooldridge, M., Jennings, N.R., \& Kinny, D. (2000). \textit{The Gaia Methodology for Agent-Oriented Analysis and Design}
+    \item Odell, J., Van Dyke Parunak, H., \& Bauer, B. (2001). \textit{Representing Agent Interaction Protocols in UML}
+    \item Documentation officielle JADE : \url{https://jade.tilab.com/}
+\end{enumerate}
+
+\end{document}
