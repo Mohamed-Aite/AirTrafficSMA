@@ -41,7 +41,10 @@ public class ControllerAgent extends Agent {
 
                     // Wait only for runway response
                     MessageTemplate mt = MessageTemplate.MatchSender(runwayAgent);
-                    ACLMessage reply = blockingReceive(mt);
+                    ACLMessage reply = blockingReceive(mt, 2000);
+                    if (reply == null) {
+                        return;
+                    }
 
                     if (reply.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
                         queue.remove(top);

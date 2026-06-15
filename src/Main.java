@@ -7,6 +7,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Runtime rt = Runtime.instance();
         Profile p = new ProfileImpl();
+        p.setParameter("gui", "true");  // ← Add this line to enable the GUI
         AgentContainer mc = rt.createMainContainer(p);
 
         // Runway
